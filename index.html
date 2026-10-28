@@ -163,8 +163,6 @@ dialog.att{width:min(920px,96vw)}
   <div class="lbox">
     <h2>외부영업 정산금 관리</h2>
     <p class="muted">대시보드와 같은 계정으로 로그인하세요.</p>
-    <button class="btn" id="gLogin" style="width:100%">Google 계정으로 로그인</button>
-    <div class="or">또는 이메일 로그인</div>
     <form id="eForm">
       <input id="eMail" type="email" placeholder="이메일" autocomplete="username" required>
       <input id="ePw" type="password" placeholder="비밀번호" autocomplete="current-password" required>
@@ -306,21 +304,19 @@ dialog.att{width:min(920px,96vw)}
 </dialog>
 
 <script type="module">
-/* ============================================================
-   Firebase 설정 — 대시보드(index.html)의 firebaseConfig를 그대로 복사해 넣으세요.
-   ============================================================ */
+/* Firebase 설정 — 대시보드와 동일 (worklog-4445b) */
 const firebaseConfig = {
-  apiKey: "여기에_API_KEY",
+  apiKey: "AIzaSyDgYYLiDXVJiqDdtb25AvsdtR1hUxPBV2Y",
   authDomain: "worklog-4445b.firebaseapp.com",
   projectId: "worklog-4445b",
-  storageBucket: "worklog-4445b.appspot.com",
-  messagingSenderId: "여기에_SENDER_ID",
-  appId: "여기에_APP_ID"
+  storageBucket: "worklog-4445b.firebasestorage.app",
+  messagingSenderId: "763693345629",
+  appId: "1:763693345629:web:1d73c1b2e1ed960f7416b4"
 };
 const COLL = "settlementTracker";   // 이 툴 전용 컬렉션 (대시보드 worklogs와 분리)
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { getFirestore, doc, collection, getDoc, getDocs, setDoc, deleteDoc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
   let items = [];
@@ -839,9 +835,6 @@ import { getFirestore, doc, collection, getDoc, getDocs, setDoc, deleteDoc, onSn
     onAuthStateChanged(auth, u=>{
       if(u){ $("#login").hidden = true; $("#app").hidden = false; startSession(u); }
       else { if(unsub){ unsub(); unsub = null; } user = null; loaded = false; items = []; showLogin(); }
-    });
-    $("#gLogin").addEventListener("click", async ()=>{
-      try{ await signInWithPopup(auth, new GoogleAuthProvider()); }catch(e){ $("#lErr").textContent = `로그인 실패 (${e.code})`; }
     });
     $("#eForm").addEventListener("submit", async e=>{
       e.preventDefault();
